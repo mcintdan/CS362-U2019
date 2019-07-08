@@ -9,6 +9,19 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state,
 		int trashFlag);
 int gainCard(int supplyPos, struct gameState *state, int toFlag, int player);
 int getCost(int cardNumber);
+
+// the below function prototypes were created as part of assignment 2
+
+void gainEstate(int currentPlayer, struct gameState *state); 
+int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bonus);
+void discardHand(int player, struct gameState *state);
+int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *state, int *bonus);
+int ambassadorEffect(int choice1, int choice2, int handPos, int currentPlayer, struct gameState *state);
+int tributeEffect(int currentPlayer, struct gameState *state, int *bonus);
+int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *state);
+
+// the above function prototypes were created as part of assignment 2
+
 int cardEffect(int card, int choice1, int choice2, int choice3, 
 	       struct gameState *state, int handPos, int *bonus);
 
