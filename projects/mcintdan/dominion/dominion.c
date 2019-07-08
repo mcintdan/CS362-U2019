@@ -694,6 +694,7 @@ int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bon
         *bonus += 4;    // add 4 coins to the amount of bonus coins
         discardCard(p, currentPlayer, state, 0);
         card_not_discarded = 0;   // exit the loop
+
       }
       else if (p > state->handCount[currentPlayer]){
         if(DEBUG) {
@@ -702,11 +703,20 @@ int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bon
         }
 
         gainEstate(currentPlayer, state);
-        card_not_discarded = 0;   // exit the loop
+
+        // introducing BUG #1 by commenting out the following line
+        //card_not_discarded = 0;   // exit the loop
+        // end of BUG #1
+
       }          
       else{
         p++;    // check if next card is an estate
       }
+
+      // introducing BUG #2 by adding the following line
+      p++;
+      // end of BUG #2
+
     }
   }
   else{
@@ -742,7 +752,11 @@ int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *
   int i, j = 0;
   
   if (choice1) {   // +2 coins
-    *bonus += 2;
+
+    // introducing BUG #1 by changing the following line from " *bonus += 2 "
+    *bonus += 8;
+    // end of BUG #1
+
   }
   else if (choice2) {   // discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
     discardHand(currentPlayer, state);
@@ -759,6 +773,11 @@ int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *
 
           for (j = 0; j < 4; j++) {   //draw 4
             drawCard(i, state);
+
+            // introducing BUG #2 by adding the following line            
+            drawCard(i, state);
+            // end of BUG #2
+
           }
         }
       }
@@ -805,12 +824,21 @@ int ambassadorEffect(int choice1, int choice2, int handPos, int currentPlayer, s
   for (i = 0; i < state->numPlayers; i++) {
     if (i != currentPlayer) {
       gainCard(state->hand[currentPlayer][choice1], state, 0, i);
+
+      // introducing BUG #1 by adding the following line            
+      gainCard(state->hand[currentPlayer][choice1], state, 0, i);
+      // end of BUG #1
+
     }
   }
 
   // use trashing implementation in discardCard function to return copies of cards to supply
   i = 0;
-  j = 0;    // reset to 0
+
+  // introducing BUG #2 by changing the following line from " j = 0 "
+  j = 10;    // reset to 0
+  // end of BUG #2
+
   while (j < choice2) {
     if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1]) {
       discardCard(i, currentPlayer, state, 1);
@@ -861,6 +889,7 @@ int tributeEffect(int currentPlayer, struct gameState *state, int *bonus) {
       }
       
       shuffle(nextPlayer, state);    // shuffle the deck
+
     } 
 
     tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer]-1];
@@ -878,9 +907,17 @@ int tributeEffect(int currentPlayer, struct gameState *state, int *bonus) {
 
   for (i = 0; i <= 2; i++) {
     if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {    // treasure cards
-      *bonus += 2;
+
+      // introducing BUG #1 by changing the following line from " *bonus += 2 "
+      *bonus += 8;
+      // end of BUG #1
+
     }    
-    else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {    // victory card found
+
+    // introducing BUG #2 by changing the first " || " to " && " instead
+    else if ((tributeRevealedCards[i] == estate && tributeRevealedCards[i] == duchy) || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) {    // victory card found
+    // end of BUG #2
+
       drawCard(currentPlayer, state);
       drawCard(currentPlayer, state);
     }
@@ -907,14 +944,21 @@ int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *st
     return -1;
   }
 
-  if ((getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2)) {    // make sure card is cheap enough to gain
+  // introducing BUG #1 by changing the " > " to " < " instead
+  if ((getCost(state->hand[currentPlayer][choice1]) + 3) < getCost(choice2)) {    // make sure card is cheap enough to gain
+  // end of BUG #1
+
     return -1;
   }
 
   gainCard(choice2, state, 2, currentPlayer);
 
   for (int i = 0; i < state->handCount[currentPlayer]; i++) {   // trash card
-    if (state->hand[currentPlayer][i] == state->hand[currentPlayer][choice1]) {
+
+    // introducing BUG #2 by changing the " == " to " != " instead
+    if (state->hand[currentPlayer][i] != state->hand[currentPlayer][choice1]) {
+    // end of BUG #2
+
       discardCard(i, currentPlayer, state, 1);      
       break;
     }
