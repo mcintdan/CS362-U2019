@@ -771,7 +771,7 @@ int main() {
 	else { printf("[empty]\t\t\t"); assertPassed(0, testG.handCount[thisPlayer], 0); }
 	printf("hand expected:");
 	for (i = 0; i < G.handCount[thisPlayer] - numCardsPlayed + numCardsDrawn; i++) {
-		if (i == 0 || i == G.handCount[thisPlayer] - numCardsPlayed + numCardsDrawn - 1) { printf("\n\t(%d)", G.deck[thisPlayer][4]); }
+		if (i < 2 || i > G.handCount[thisPlayer] - numCardsPlayed + numCardsDrawn - 3) { printf("\n\t(%d)", G.deck[thisPlayer][4]); }
 		else { printf("\n\t(%d)", G.hand[thisPlayer][4]); }
 	}
 	printf("\n");
