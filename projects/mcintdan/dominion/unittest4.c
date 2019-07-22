@@ -764,7 +764,7 @@ int main() {
 		printf("\n");
 		for (j = 0; j < testG.handCount[thisPlayer]; j++) {
 			printf("\t(%d)\t\t\t\t", testG.hand[thisPlayer][j]);
-			if (j == 0 || j == testG.handCount[thisPlayer] - 1) { assertPassed(1, testG.hand[thisPlayer][j], G.deck[thisPlayer][4]); }
+			if (j < 2 || j > testG.handCount[thisPlayer] - 3) { assertPassed(1, testG.hand[thisPlayer][j], G.deck[thisPlayer][4]); }
 			else { assertPassed(1, testG.hand[thisPlayer][j], G.hand[thisPlayer][4]); }
 		}
 	}
