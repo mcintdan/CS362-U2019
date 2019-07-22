@@ -980,7 +980,7 @@ int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *st
         incorrect Dominion behavior since the Mine card states that the
         card is gained to the hand.
   */
-  if ((getCost(state->hand[currentPlayer][choice1]) + 3) < getCost(choice2)) {    // make sure card is cheap enough to gain
+  if ((getCost(state->hand[currentPlayer][choice1]) + 3) > getCost(choice2)) {    // make sure card is cheap enough to gain
 
     return -1;
   }
