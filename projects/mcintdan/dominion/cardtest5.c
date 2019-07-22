@@ -26,7 +26,7 @@
 #include <stdlib.h>
 
 
-#define TESTFUNCTION "getWinners"
+#define TESTFUNCTION "drawCard"
 
 
 /************************************************************************
