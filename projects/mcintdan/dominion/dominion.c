@@ -669,7 +669,6 @@ int getCost(int cardNumber)
 void gainEstate(int currentPlayer, struct gameState *state) {
   if (supplyCount(estate, state) > 0){
     gainCard(estate, state, 0, currentPlayer);
-    state->supplyCount[estate]--;//Decrement estates
     if (supplyCount(estate, state) == 0){
       isGameOver(state);
     }
@@ -682,7 +681,7 @@ void gainEstate(int currentPlayer, struct gameState *state) {
  *    +1 Buy
  *    You may discard an Estate for +$4. If you don't, gain an Estate.
  ***************************************************************************/
-int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bonus) {
+int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bonus, int handPos) {
   state->numBuys++;   // +1 buy
 
   if (choice > 0){    // boolean true or going to discard an estate
@@ -723,6 +722,9 @@ int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bon
     gainEstate(currentPlayer, state);
   }
 
+  /* Note: The following line added after completion of Assignment 2 but before Assignment 3 */
+  discardCard(handPos, currentPlayer, state, 0);
+
   return 0;
 }
 
@@ -734,7 +736,9 @@ int baronEffect(int choice, int currentPlayer, struct gameState *state, int *bon
 void discardHand(int player, struct gameState *state) {
   int i = 0;
 
-  while(numHandCards(state) > 0) {    // discard hand
+  /* modified the following line after completion of Assignment 2 but before Assignment 3 since numHandsCards
+        function was not suitable for this purpose and it was creating issues with the test case expected results */
+  while(state->handCount[player] > 0) {    // discard hand
     discardCard(i, player, state, 0);
     i++;
   }
@@ -747,11 +751,13 @@ void discardHand(int player, struct gameState *state) {
  *    Choose one: +$2; or discard your hand, +4 Cards, and each other player
  *      with at least 5 cards in hand discards their hand and draws 4 cards.
  ***************************************************************************/
-int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *state, int *bonus) {
+int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *state, int *bonus, int handPos) {
   state->numActions++;    // +1 action
   int i, j = 0;
   
-  if (choice1) {   // +2 coins
+  if (choice1) {   // +2 coins    
+    /* Note: The following line added after completion of Assignment 2 but before Assignment 3 */
+    discardCard(handPos, currentPlayer, state, 0);
 
     // introducing BUG #1 by changing the following line from " *bonus += 2 "
     *bonus += 8;
@@ -759,6 +765,10 @@ int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *
 
   }
   else if (choice2) {   // discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
+
+    /* Note: The following line added after completion of Assignment 2 but before Assignment 3 */
+    discardCard(handPos, currentPlayer, state, 0);
+
     discardHand(currentPlayer, state);
         
     for (i = 0; i < 4; i++) {   // draw 4
@@ -788,13 +798,13 @@ int minionEffect(int choice1, int choice2, int currentPlayer, struct gameState *
 }
 
 /* ambassadorEffect
- *    implements the effects of a ambassador card being played
+ *    implements the effects of an ambassador card being played
  *
  *    card text:
  *    Reveal a card from your hand. Return up to 2 copies of it from your
  *      hand to the Supply. Then each other player gains a copy of it.
  ***************************************************************************/
-int ambassadorEffect(int choice1, int choice2, int handPos, int currentPlayer, struct gameState *state) {
+int ambassadorEffect(int choice1, int choice2, int currentPlayer, struct gameState *state, int handPos) {
   int i, j = 0;    // j is used to check if player has enough cards to discard
 
   if (choice2 > 2 || choice2 < 0)   // cannot discard less than 0 or more than 2 copies
@@ -847,6 +857,9 @@ int ambassadorEffect(int choice1, int choice2, int handPos, int currentPlayer, s
     i++;
   }   
 
+  /* Note: The following line added after completion of Assignment 2 but before Assignment 3 */
+  discardCard(handPos, currentPlayer, state, 0);
+
   return 0;
 }
 
@@ -859,10 +872,11 @@ int ambassadorEffect(int choice1, int choice2, int handPos, int currentPlayer, s
  *      Treasure Card, +$2
  *      Victory Card, +2 Cards
  ***************************************************************************/
-int tributeEffect(int currentPlayer, struct gameState *state, int *bonus) {
+int tributeEffect(int currentPlayer, struct gameState *state, int *bonus, int handPos) {
   int i = 0;
   int nextPlayer = currentPlayer + 1;
-  int tributeRevealedCards[2] = {-1, -1};
+  // made correction to the following line after completion of Assignment 2 but before Assignment 3 for testing purposes
+  int tributeRevealedCards[2] = {-5, -5};
 
   // if player only has 0 or 1 card between their deck and discard piles
   if ((state->discardCount[nextPlayer] + state->deckCount[nextPlayer]) <= 1) {
@@ -898,14 +912,16 @@ int tributeEffect(int currentPlayer, struct gameState *state, int *bonus) {
     state->deckCount[nextPlayer]--;
   }    
 
-  // if we have a duplicate card, just drop one      
-  if (tributeRevealedCards[0] == tributeRevealedCards[1]) {   
+  // if we have a duplicate card, just drop one 
+  // made correction to the following line after completion of Assignment 2 but before Assignment 3 for testing purposes
+  if ((tributeRevealedCards[0] == tributeRevealedCards[1]) && tributeRevealedCards[0] != -5) {   
     state->playedCards[state->playedCardCount] = tributeRevealedCards[1];
     state->playedCardCount++;
-    tributeRevealedCards[1] = -1;
+    tributeRevealedCards[1] = -5;
   }
 
-  for (i = 0; i <= 2; i++) {
+  // made correction to the following line after completion of Assignment 2 but before Assignment 3 for testing purposes
+  for (i = 0; i < 2; i++) {
     if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) {    // treasure cards
 
       // introducing BUG #1 by changing the following line from " *bonus += 2 "
@@ -921,10 +937,14 @@ int tributeEffect(int currentPlayer, struct gameState *state, int *bonus) {
       drawCard(currentPlayer, state);
       drawCard(currentPlayer, state);
     }
-    else {    // action card
+    // made correction to the following line after completion of Assignment 2 but before Assignment 3 for testing purposes
+    else if (tributeRevealedCards[i] != -5 && tributeRevealedCards[i] != curse) {    // action card
       state->numActions += 2;
     }
   }
+
+  /* Note: The following line added after completion of Assignment 2 but before Assignment 3 */
+  discardCard(handPos, currentPlayer, state, 0);
 
   return 0;
 }
@@ -935,7 +955,7 @@ int tributeEffect(int currentPlayer, struct gameState *state, int *bonus) {
  *    You may trash a Treasure from your hand. Gain a Treasure to your hand
  *     costing up to $3 more than it
  ***************************************************************************/
-int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *state) {
+int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *state, int handPos) {
   if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold) {
     return -1;
   }
@@ -944,14 +964,30 @@ int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *st
     return -1;
   }
 
-  // introducing BUG #1 by changing the " > " to " < " instead
+  /* NOTE: During completion of Assignment 2, the following if statement
+        conditional was modified, inadvertently addressing an existing bug,
+        with the expectation that the change would result in incorrect
+        Dominion behavior. This was an oversight and change was made in error
+        since it actually fixed an existing bug and resulted in correct
+        behavior. Reverted the " < " sign back to " > " like the code was
+        originally written, with the understanding that the original code
+        had this as an existing bug that already resulted in incorrect behavior.
+
+      For the purpose of completing Assignment 3, a new change has been made
+        to a line below in which a 0 is passed instead of 2 for the toFlag
+        parameter, which will result in the gained card being sent to the
+        player's discard pile as opposed to the player's hand, which is
+        incorrect Dominion behavior since the Mine card states that the
+        card is gained to the hand.
+  */
   if ((getCost(state->hand[currentPlayer][choice1]) + 3) < getCost(choice2)) {    // make sure card is cheap enough to gain
-  // end of BUG #1
 
     return -1;
   }
 
-  gainCard(choice2, state, 2, currentPlayer);
+  // introducing BUG #1 by passing a 0 instead of a 2 as the toFlag parameter
+  gainCard(choice2, state, 0, currentPlayer);
+  // end of BUG #1
 
   for (int i = 0; i < state->handCount[currentPlayer]; i++) {   // trash card
 
@@ -963,6 +999,9 @@ int mineEffect(int choice1, int choice2, int currentPlayer, struct gameState *st
       break;
     }
   }
+
+  /* Note: The following line added after completion of Assignment 2 but before Assignment 3 */
+  discardCard(handPos, currentPlayer, state, 0);
 
   return 0;
 }
@@ -1099,7 +1138,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return -1;
 			
     case mine:
-      return mineEffect(choice1, choice2, currentPlayer, state);
+      return mineEffect(choice1, choice2, currentPlayer, state, handPos);
 			
     case remodel:
       j = state->hand[currentPlayer][choice1];  //store card we will trash
@@ -1150,7 +1189,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case baron:
-      return baronEffect(choice1, currentPlayer, state, bonus);
+      return baronEffect(choice1, currentPlayer, state, bonus, handPos);
 		
     case great_hall:
       //+1 Card
@@ -1164,7 +1203,7 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case minion:
-      return minionEffect(choice1, choice2, currentPlayer, state, bonus);
+      return minionEffect(choice1, choice2, currentPlayer, state, bonus, handPos);
 		
     case steward:
       if (choice1 == 1)
@@ -1190,10 +1229,10 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
       return 0;
 		
     case tribute:
-      return tributeEffect(currentPlayer, state, bonus);
+      return tributeEffect(currentPlayer, state, bonus, handPos);
 		
     case ambassador:
-      return ambassadorEffect(choice1, choice2, handPos, currentPlayer, state);
+      return ambassadorEffect(choice1, choice2, currentPlayer, state, handPos);
 		
     case cutpurse:
 
