@@ -5,6 +5,7 @@
 
 #define MAX_HAND 500
 #define MAX_DECK 500
+#define MAX_DISCARD 500
 
 #define MAX_PLAYERS 4
 
@@ -67,7 +68,7 @@ struct gameState {
   int handCount[MAX_PLAYERS];
   int deck[MAX_PLAYERS][MAX_DECK];
   int deckCount[MAX_PLAYERS];
-  int discard[MAX_PLAYERS][MAX_DECK];
+  int discard[MAX_PLAYERS][MAX_DISCARD];
   int discardCount[MAX_PLAYERS];
   int playedCards[MAX_DECK];
   int playedCardCount;
