@@ -145,17 +145,17 @@ int main() {
 
 	    for (j = 0; j < numPlayers; j++) {
 			if (j != p) {
-			    G.deckCount[p] = (rand() % MAX_DECK);
-			    for (i = 0; i < G.deckCount[p]; i++) {
-			    	G.deck[p][i] = rand() % 28;
+			    G.deckCount[j] = (rand() % MAX_DECK);
+			    for (i = 0; i < G.deckCount[j]; i++) {
+			    	G.deck[j][i] = rand() % 28;
 			    }
-			    G.discardCount[p] = (rand() % MAX_DISCARD);
-			    for (i = 0; i < G.discardCount[p]; i++) {
-			    	G.discard[p][i] = rand() % 28;
+			    G.discardCount[j] = (rand() % MAX_DISCARD);
+			    for (i = 0; i < G.discardCount[j]; i++) {
+			    	G.discard[j][i] = rand() % 28;
 			    }
-			    G.handCount[p] = (rand() % MAX_HAND);
-			    for (i = 0; i < G.handCount[p]; i++) {
-			    	G.hand[p][i] = rand() % 28;
+			    G.handCount[j] = (rand() % MAX_HAND);
+			    for (i = 0; i < G.handCount[j]; i++) {
+			    	G.hand[j][i] = rand() % 28;
 			    }				
 			}
 		}
