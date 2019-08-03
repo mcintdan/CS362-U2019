@@ -28,7 +28,7 @@
 
 
 #define TESTCARD "minion"
-#define MAX_TESTS 100000
+#define MAX_TESTS 10000
 
 
 /************************************************************************
@@ -38,10 +38,10 @@
  ************************************************************************/
 void assertPassed(int assertType, int value1, int value2) {
 	if (assertType) {		// testing for equality
-		if (value1 != value2) { printf("FAILED [ ]\n"); }
+		if (value1 != value2) { printf("--- FAILED ---\n"); }
 	}
 	else {					// testing for inequality
-		if (value1 == value2) { printf("FAILED [ ]\n"); }
+		if (value1 == value2) { printf("--- FAILED ---\n"); }
 	}
 }
 
@@ -76,7 +76,7 @@ void checkCard(int *n, int choice1, int choice2, int choice3, struct gameState *
 		for (i = pre.discardCount[pre.whoseTurn], j = 0; i < (pre.discardCount[pre.whoseTurn] + pre.handCount[pre.whoseTurn]); i++, j++) {
 			pre.discard[pre.whoseTurn][i] = pre.hand[pre.whoseTurn][j];
 		}
-		pre.discardCount[pre.whoseTurn] += pre.handCount[pre.whoseTurn];		// discard count increased by hand count
+		pre.discardCount[pre.whoseTurn] += pre.handCount[pre.whoseTurn] + 1;		// discard count increased by hand count
 		pre.handCount[pre.whoseTurn] = 4;		// hand count is now increased by 4
 		pre.deckCount[pre.whoseTurn] -= 4;		// deck count is now decreased by 4
 
@@ -120,8 +120,8 @@ int main() {
 	printf("\n------------------------------------------------------------\n\n\n");
 
 	for (n = 0; n < MAX_TESTS; n++) {
-		numPlayers = (rand() % 4);
-		numPlayers++;
+		numPlayers = (rand() % 3);
+		numPlayers += 2;
 	    p = (rand() % numPlayers);
 
 		// initialize a game state and player cards
@@ -143,7 +143,7 @@ int main() {
 	    	G.hand[p][i] = rand() % 28;
 	    }
 
-	    for (j = 0; j < numPlayers; j++) {
+	    for (j = 0; j < G.numPlayers; j++) {
 			if (j != p) {
 			    G.deckCount[j] = (rand() % MAX_DECK);
 			    for (i = 0; i < G.deckCount[j]; i++) {

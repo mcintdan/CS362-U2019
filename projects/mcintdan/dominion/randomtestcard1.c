@@ -28,7 +28,7 @@
 
 
 #define TESTCARD "baron"
-#define MAX_TESTS 100000
+#define MAX_TESTS 10000
 
 
 /************************************************************************
@@ -38,10 +38,10 @@
  ************************************************************************/
 void assertPassed(int assertType, int value1, int value2) {
 	if (assertType) {		// testing for equality
-		if (value1 != value2) { printf("FAILED [ ]\n"); }
+		if (value1 != value2) { printf("--- FAILED ---\n"); }
 	}
 	else {					// testing for inequality
-		if (value1 == value2) { printf("FAILED [ ]\n"); }
+		if (value1 == value2) { printf("--- FAILED ---\n"); }
 	}
 }
 
@@ -106,8 +106,8 @@ int main() {
 	printf("\n------------------------------------------------------------\n\n\n");
 
 	for (n = 0; n < MAX_TESTS; n++) {
-		numPlayers = (rand() % 4);
-		numPlayers++;
+		numPlayers = (rand() % 3);
+		numPlayers += 2;
 	    p = (rand() % numPlayers);
 
 		// initialize a game state and player cards

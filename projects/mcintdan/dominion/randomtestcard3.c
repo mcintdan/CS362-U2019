@@ -28,7 +28,7 @@
 
 
 #define TESTCARD "tribute"
-#define MAX_TESTS 100000
+#define MAX_TESTS 10000
 
 
 /************************************************************************
@@ -38,10 +38,10 @@
  ************************************************************************/
 void assertPassed(int assertType, int value1, int value2) {
 	if (assertType) {		// testing for equality
-		if (value1 != value2) { printf("FAILED [ ]\n"); }
+		if (value1 != value2) { printf("--- FAILED ---\n"); }
 	}
 	else {					// testing for inequality
-		if (value1 == value2) { printf("FAILED [ ]\n"); }
+		if (value1 == value2) { printf("--- FAILED ---\n"); }
 	}
 }
 
@@ -111,6 +111,11 @@ void checkCard(int *n, int choice1, int choice2, int choice3, struct gameState *
 		else if (tributeRevealedCards[i] != -5 && tributeRevealedCards[i] != curse) { pre.numActions += 2; }
 	}
 
+	pre.discardCount[pre.whoseTurn]++;	// increase by 1 for played card
+	pre.discard[pre.whoseTurn][pre.discardCount[pre.whoseTurn] - 1] = pre.hand[pre.whoseTurn][0];
+	pre.hand[pre.whoseTurn][0] = pre.hand[pre.whoseTurn][pre.handCount[pre.whoseTurn] - 1];
+	pre.handCount[pre.whoseTurn]--;		// decrease by 1 for played card
+
 	assertPassed(1, r, 0);		// confirm function does not fail
 	r = memcmp(&pre, post, sizeof(struct gameState));
 	assertPassed(1, r, 0);		// confirm expected outcome
@@ -138,8 +143,8 @@ int main() {
 	printf("\n------------------------------------------------------------\n\n\n");
 
 	for (n = 0; n < MAX_TESTS; n++) {
-		numPlayers = (rand() % 4);
-		numPlayers++;
+		numPlayers = (rand() % 3);
+		numPlayers += 2;
 	    p = (rand() % numPlayers);
 
 		// initialize a game state and player cards
@@ -161,7 +166,7 @@ int main() {
 	    	G.hand[p][i] = rand() % 28;
 	    }
 
-	    for (j = 0; j < numPlayers; j++) {
+	    for (j = 0; j < G.numPlayers; j++) {
 			if (j != p) {
 			    G.deckCount[j] = (rand() % MAX_DECK);
 			    for (i = 0; i < G.deckCount[j]; i++) {
