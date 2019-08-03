@@ -8,7 +8,7 @@
  *
  * Include the following lines in makefile:
  *
- * unittest1: cardtest2.c dominion.o rngs.o
+ * cardtest2: cardtest2.c dominion.o rngs.o
  *      gcc -o cardtest2 -g  cardtest2.c dominion.o rngs.o $(CFLAGS)
  *
  * REFERENCE NOTE:
@@ -97,7 +97,7 @@ int main() {
 	for (i = 0; i < G.deckCount[thisPlayer]; i++) { printf("(%d)\t", G.deck[thisPlayer][i]); }
 	printf("\n\ndeck after shuffle:\t");
 	for (i = 0; i < testG.deckCount[thisPlayer]; i++) { printf("(%d)\t", testG.deck[thisPlayer][i]); }
-	result = memcmp(&testG, &G, sizeof(struct gameState));
+	result = memcmp(testG.deck[thisPlayer], &G.deck[thisPlayer], sizeof(struct gameState));
 	assertPassed(0, result, success);	// verify deck is shuffled
 
 	printf("\n\n------------------------------------------------------------\n");

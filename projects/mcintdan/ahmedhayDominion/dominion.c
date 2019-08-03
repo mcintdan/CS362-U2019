@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include "rngs.h"
@@ -213,7 +212,8 @@ int shuffle(int player, struct gameState *state) {
   /* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
 
   while (state->deckCount[player] > 0) {
-    card = floor(Random() * state->deckCount[player]);
+// ADDED A CAST TO INT ON THE FOLLOWING LINE TO FIX COMPILATION ERROR FOR ASSIGNMENT 5 - DMcIntosh
+    card = (int)floor(Random() * state->deckCount[player]);
     newDeck[newDeckPos] = state->deck[player][card];
     newDeckPos++;
     for (i = card; i < state->deckCount[player]-1; i++) {
@@ -851,7 +851,8 @@ return 0;
 }
 
 int mineEffect(struct gameState *state, int choice1, int choice2, int handPos, int currentPlayer){
-  int j = state->hand[currentPlayer][choice1];  //store card we will trash
+// COMMENTED OUT THE FOLLOWING LINE SINCE IT WAS CAUSING COMPILATION ERROR FOR ASSIGNMENT 5 - DMcIntosh
+  //int j = state->hand[currentPlayer][choice1];  //store card we will trash
 
   if (state->hand[currentPlayer][choice1] < copper || state->hand[currentPlayer][choice1] > gold){
     return -1;
@@ -1296,7 +1297,11 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 
 //end of dominion.c
-=======
+
+
+/* COMMENTED OUT ALL LINES BELOW FOR ASSIGNMENT 5 - DMcIntosh
+**********************************************************************************
+
 #include "dominion.h"
 #include "dominion_helpers.h"
 #include "rngs.h"
@@ -1312,10 +1317,20 @@ int compare(const void* a, const void* b) {
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 struct gameState* newGame() {
   struct gameState* g = malloc(sizeof(struct gameState));
   return g;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
 		  int k8, int k9, int k10) {
@@ -1332,6 +1347,11 @@ int* kingdomCards(int k1, int k2, int k3, int k4, int k5, int k6, int k7,
   k[9] = k10;
   return k;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
 		   struct gameState *state) {
@@ -1497,6 +1517,11 @@ int initializeGame(int numPlayers, int kingdomCards[10], int randomSeed,
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int shuffle(int player, struct gameState *state) {
  
 
@@ -1508,7 +1533,7 @@ int shuffle(int player, struct gameState *state) {
   if (state->deckCount[player] < 1)
     return -1;
   qsort ((void*)(state->deck[player]), state->deckCount[player], sizeof(int), compare); 
-  /* SORT CARDS IN DECK TO ENSURE DETERMINISM! */
+  // SORT CARDS IN DECK TO ENSURE DETERMINISM!
 
   while (state->deckCount[player] > 0) {
     card = floor(Random() * state->deckCount[player]);
@@ -1526,6 +1551,11 @@ int shuffle(int player, struct gameState *state) {
 
   return 0;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int playCard(int handPos, int choice1, int choice2, int choice3, struct gameState *state) 
 {	
@@ -1568,6 +1598,11 @@ int playCard(int handPos, int choice1, int choice2, int choice3, struct gameStat
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int buyCard(int supplyPos, struct gameState *state) {
   int who;
   if (DEBUG){
@@ -1607,18 +1642,38 @@ int buyCard(int supplyPos, struct gameState *state) {
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int numHandCards(struct gameState *state) {
   return state->handCount[ whoseTurn(state) ];
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int handCard(int handPos, struct gameState *state) {
   int currentPlayer = whoseTurn(state);
   return state->hand[currentPlayer][handPos];
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int supplyCount(int card, struct gameState *state) {
   return state->supplyCount[card];
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int fullDeckCount(int player, int card, struct gameState *state) {
   int i;
@@ -1642,9 +1697,19 @@ int fullDeckCount(int player, int card, struct gameState *state) {
   return count;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int whoseTurn(struct gameState *state) {
   return state->whoseTurn;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int endTurn(struct gameState *state) {
   int k;
@@ -1686,6 +1751,11 @@ int endTurn(struct gameState *state) {
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int isGameOver(struct gameState *state) {
   int i;
   int j;
@@ -1712,6 +1782,11 @@ int isGameOver(struct gameState *state) {
 
   return 0;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int scoreFor (int player, struct gameState *state) {
 
@@ -1752,6 +1827,11 @@ int scoreFor (int player, struct gameState *state) {
 
   return score;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int getWinners(int players[MAX_PLAYERS], struct gameState *state) {
   int i;	
@@ -1820,6 +1900,11 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state) {
 
   return 0;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int drawCard(int player, struct gameState *state)
 {	int count;
@@ -1941,6 +2026,11 @@ int getCost(int cardNumber)
 	
   return -1;
 }
+
+
+******************************************************************************/
+/******************************************************************************
+
 
 int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState *state, int handPos, int *bonus)
 {
@@ -2522,6 +2612,11 @@ int cardEffect(int card, int choice1, int choice2, int choice3, struct gameState
   return -1;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int discardCard(int handPos, int currentPlayer, struct gameState *state, int trashFlag)
 {
 	
@@ -2560,6 +2655,11 @@ int discardCard(int handPos, int currentPlayer, struct gameState *state, int tra
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int gainCard(int supplyPos, struct gameState *state, int toFlag, int player)
 {
   //Note: supplyPos is enum of choosen card
@@ -2597,6 +2697,11 @@ int gainCard(int supplyPos, struct gameState *state, int toFlag, int player)
   return 0;
 }
 
+
+******************************************************************************/
+/******************************************************************************
+
+
 int updateCoins(int player, struct gameState *state, int bonus)
 {
   int i;
@@ -2630,4 +2735,5 @@ int updateCoins(int player, struct gameState *state, int bonus)
 
 //end of dominion.c
 
->>>>>>> 9c0f7f34120413bbf5b7ec5875dd405879540264
+
+******************************************************************************/

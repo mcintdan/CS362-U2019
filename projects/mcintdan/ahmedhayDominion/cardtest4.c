@@ -8,7 +8,7 @@
  *
  * Include the following lines in makefile:
  *
- * unittest1: cardtest4.c dominion.o rngs.o
+ * cardtest4: cardtest4.c dominion.o rngs.o
  *      gcc -o cardtest4 -g  cardtest4.c dominion.o rngs.o $(CFLAGS)
  *
  * REFERENCE NOTE:

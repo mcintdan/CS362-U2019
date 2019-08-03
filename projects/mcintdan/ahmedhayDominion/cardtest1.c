@@ -8,7 +8,7 @@
  *
  * Include the following lines in makefile:
  *
- * unittest1: cardtest1.c dominion.o rngs.o
+ * cardtest1: cardtest1.c dominion.o rngs.o
  *      gcc -o cardtest1 -g  cardtest1.c dominion.o rngs.o $(CFLAGS)
  *
  * REFERENCE NOTE:
@@ -249,7 +249,7 @@ int main() {
 		// verify the remaining state variables for first player's turn can be initialized
 		printf("outpost played actual = %d, expected = %d\t\t\t\t", testG.outpostPlayed, 0);
 		assertPassed(1, testG.outpostPlayed, 0);
-		printf("phase = %d, expected actual = %d\t\t\t\t\t", testG.phase, 0);
+		printf("phase actual = %d, expected = %d\t\t\t\t\t", testG.phase, 0);
 		assertPassed(1, testG.phase, 0);
 		printf("number of actions actual = %d, expected = %d\t\t\t", testG.numActions, 1);
 		assertPassed(1, testG.numActions, 1);
@@ -257,6 +257,8 @@ int main() {
 		assertPassed(1, testG.numBuys, 1);
 		for (j = 0; j < testG.handCount[0]; j++) {
 			if (testG.hand[0][j] == copper) { numCoins++; }
+			else if (testG.hand[0][j] == silver) { numCoins += 2; }
+			else if (testG.hand[0][j] == gold) { numCoins += 3; }
 		}
 		printf("number of coins actual = %d, expected = %d\t\t\t", testG.coins, numCoins);
 		assertPassed(1, testG.coins, numCoins);

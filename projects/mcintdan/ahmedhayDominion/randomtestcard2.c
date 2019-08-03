@@ -134,7 +134,7 @@ int main() {
 	    for (i = 0; i < G.deckCount[p]; i++) {
 	    	G.deck[p][i] = rand() % 28;
 	    }
-	    G.discardCount[p] = (rand() % MAX_DISCARD);
+	    G.discardCount[p] = (rand() % MAX_DECK);
 	    for (i = 0; i < G.discardCount[p]; i++) {
 	    	G.discard[p][i] = rand() % 28;
 	    }
@@ -149,7 +149,7 @@ int main() {
 			    for (i = 0; i < G.deckCount[j]; i++) {
 			    	G.deck[j][i] = rand() % 28;
 			    }
-			    G.discardCount[j] = (rand() % MAX_DISCARD);
+			    G.discardCount[j] = (rand() % MAX_DECK);
 			    for (i = 0; i < G.discardCount[j]; i++) {
 			    	G.discard[j][i] = rand() % 28;
 			    }

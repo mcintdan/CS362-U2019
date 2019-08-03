@@ -28,7 +28,7 @@
 
 
 #define TESTCARD "tribute"
-#define MAX_TESTS 200
+#define MAX_TESTS 10000
 
 
 /************************************************************************
@@ -51,26 +51,8 @@ void assertPassed(int assertType, int value1, int value2) {
  ************************************************************************/
 void checkCard(int *n, int choice1, int choice2, int choice3, struct gameState *post, int handpos, int *bonus) {
 	struct gameState pre;
-	int i = 0, j = 0;
-
-    for (j = 0; j < post->numPlayers; j++) {
-		if (j != post->whoseTurn) {
-		    post->deckCount[j] = (rand() % MAX_DECK);
-		    for (i = 0; i < post->deckCount[j]; i++) {
-		    	post->deck[j][i] = rand() % 28;
-		    }
-		    post->discardCount[j] = (rand() % MAX_DISCARD);
-		    for (i = 0; i < post->discardCount[j]; i++) {
-		    	post->discard[j][i] = rand() % 28;
-		    }
-		    post->handCount[j] = (rand() % MAX_HAND);
-		    for (i = 0; i < post->handCount[j]; i++) {
-		    	post->hand[j][i] = rand() % 28;
-		    }				
-		}
-	}
-
 	memcpy(&pre, post, sizeof(struct gameState));
+	int i = 0;
 	int r;
 	int nextPlayer = pre.whoseTurn + 1;
 	if (nextPlayer == pre.numPlayers) { nextPlayer = 0; }
@@ -146,7 +128,7 @@ int main() {
 	srand(time(0));
     int seed = 1000;
     int testNo = 0;
-    int i = 0; //, j = 0;
+    int i = 0, j = 0;
     int n = 0, p = 0;
     int numPlayers = 0;
     int k[10] = {ambassador, baron, village, minion, mine, cutpurse,
@@ -175,7 +157,7 @@ int main() {
 	    for (i = 0; i < G.deckCount[p]; i++) {
 	    	G.deck[p][i] = rand() % 28;
 	    }
-	    G.discardCount[p] = (rand() % MAX_DISCARD);
+	    G.discardCount[p] = (rand() % MAX_DECK);
 	    for (i = 0; i < G.discardCount[p]; i++) {
 	    	G.discard[p][i] = rand() % 28;
 	    }
@@ -183,6 +165,23 @@ int main() {
 	    for (i = 0; i < G.handCount[p]; i++) {
 	    	G.hand[p][i] = rand() % 28;
 	    }
+
+	    for (j = 0; j < G.numPlayers; j++) {
+			if (j != p) {
+			    G.deckCount[j] = (rand() % MAX_DECK);
+			    for (i = 0; i < G.deckCount[j]; i++) {
+			    	G.deck[j][i] = rand() % 28;
+			    }
+			    G.discardCount[j] = (rand() % MAX_DECK);
+			    for (i = 0; i < G.discardCount[j]; i++) {
+			    	G.discard[j][i] = rand() % 28;
+			    }
+			    G.handCount[j] = (rand() % MAX_HAND);
+			    for (i = 0; i < G.handCount[j]; i++) {
+			    	G.hand[j][i] = rand() % 28;
+			    }				
+			}
+		}
 
 	    bonus = (rand() % 256);
 	 

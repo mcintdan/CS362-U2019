@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 #ifndef _DOMINION_HELPERS_H
 #define _DOMINION_HELPERS_H
 
@@ -21,7 +20,7 @@ int mineEffect(struct gameState *state, int choice1, int choice2, int handPos, i
 
 
 #endif
-=======
+/* COMMENTED OUT FOLLOWING LINES FOR ASSIGNMENT 5 - DMcIntosh
 #ifndef _DOMINION_HELPERS_H
 #define _DOMINION_HELPERS_H
 
@@ -37,4 +36,4 @@ int cardEffect(int card, int choice1, int choice2, int choice3,
 	       struct gameState *state, int handPos, int *bonus);
 
 #endif
->>>>>>> 9c0f7f34120413bbf5b7ec5875dd405879540264
+*/
