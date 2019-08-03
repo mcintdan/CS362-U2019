@@ -113,8 +113,8 @@ int main() {
 		numPlayers++;
 	    p = (rand() % numPlayers);
 
-	// initialize a game state and player cards
-	initializeGame(numPlayers, k, seed, &G);
+		// initialize a game state and player cards
+		initializeGame(numPlayers, k, seed, &G);
 
 		G.numPlayers = numPlayers;
 		G.whoseTurn = p;   

@@ -100,9 +100,6 @@ int main() {
 	int choice1 = -1, choice2 = -1, choice3 = -1;
 	int handpos = 0, bonus = 0;
 
-	// initialize a game state and player cards
-	//initializeGame(numPlayers, k, seed, &G);
-
 	printf("\n----------------------------------------------------------------------\n");
 	printf("----------------------------------------------------------------------\n");
 	printf(" >>>>> RANDOM TESTING [%s] <<<<<\n", TESTCARD);
@@ -113,8 +110,8 @@ int main() {
 		numPlayers++;
 	    p = (rand() % numPlayers);
 
-	// initialize a game state and player cards
-	initializeGame(numPlayers, k, seed, &G);
+		// initialize a game state and player cards
+		initializeGame(numPlayers, k, seed, &G);
 
 		G.numPlayers = numPlayers;
 		G.whoseTurn = p;   
