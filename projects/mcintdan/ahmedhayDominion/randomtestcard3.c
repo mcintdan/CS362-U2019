@@ -28,7 +28,7 @@
 
 
 #define TESTCARD "tribute"
-#define MAX_TESTS 10000
+#define MAX_TESTS 1000000
 
 
 /************************************************************************
