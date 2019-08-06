@@ -351,7 +351,8 @@ public class UrlValidator implements Serializable {
      */
     protected boolean isValidScheme(String scheme) {
         if (scheme == null) {
-            return false;
+        	//first bug. Returning true to allow null schemes
+            return true;
         }
 
         // TODO could be removed if external schemes were checked in the ctor before being stored
@@ -453,7 +454,7 @@ public class UrlValidator implements Serializable {
             String norm = uri.normalize().getPath();
             if (norm.startsWith("/../") // Trying to go via the parent dir 
              || norm.equals("/..")) {   // Trying to go to the parent dir
-                return false;
+            	return false;
             }
         } catch (URISyntaxException e) {
             return false;
@@ -474,7 +475,8 @@ public class UrlValidator implements Serializable {
      */
     protected boolean isValidQuery(String query) {
         if (query == null) {
-            return true;
+        	//Second bug. return false to not allow null queries - NAW
+            return false;
         }
 
         return QUERY_PATTERN.matcher(query).matches();

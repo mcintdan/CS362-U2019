@@ -16,6 +16,9 @@
  */
 
 import junit.framework.TestCase;
+import java.io.*;
+import java.util.*;
+import java.util.regex.Matcher;
 
 /**
  * Performs Validation Test for url validations.
@@ -39,7 +42,8 @@ protected void setUp() {
    }
 
    public void testIsValid() {
-        testIsValid(testUrlParts, UrlValidator.ALLOW_ALL_SCHEMES);
+       manualUnitTest();
+       testIsValid(testUrlParts, UrlValidator.ALLOW_ALL_SCHEMES);
         setUp();
         long options =
             UrlValidator.ALLOW_2_SLASHES
@@ -120,6 +124,36 @@ protected void setUp() {
       if (printStatus) {
          System.out.println();
       }
+   }
+   
+   public void manualUnitTest() {
+
+	   String line = null;
+
+	   try {
+		   BufferedReader urls = new BufferedReader(new FileReader("urls.txt"));
+		   while ((line = urls.readLine()) != null) {
+			   String[] parts = line.split(" ");
+			   int correct = Integer.parseInt(parts[1]);
+			   UrlValidator validator = new UrlValidator();
+			   if(correct == 1) {
+				   assertTrue(validator.isValid(parts[0]));
+			   }
+			   else {
+				   assertFalse(validator.isValid(parts[0]));
+			   }
+			   
+		   }
+		   urls.close();
+	   }
+	   catch (FileNotFoundException ex){
+		   System.out.println("File not found");
+	   }
+	   catch (IOException ex){
+		   
+	   }
+	   finally {
+	   }
    }
 
    public void testValidator202() {
