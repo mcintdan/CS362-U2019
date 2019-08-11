@@ -443,7 +443,11 @@ public class UrlValidator implements Serializable {
     protected boolean isValidPath(String path) {
         if (path == null) {
             return false;
+        }//Bug for random test: if path is empty string, return false even though it should be true
+        if (path == ""){
+            return false;
         }
+
 
         if (!PATH_PATTERN.matcher(path).matches()) {
             return false;
