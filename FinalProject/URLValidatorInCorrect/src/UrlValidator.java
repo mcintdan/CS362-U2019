@@ -444,7 +444,7 @@ public class UrlValidator implements Serializable {
         if (path == null) {
             return false;
         }//Bug for random test: if path is empty string, return false even though it should be true
-        if (path == ""){
+        if (path == "/test1"){
             return false;
         }
 
