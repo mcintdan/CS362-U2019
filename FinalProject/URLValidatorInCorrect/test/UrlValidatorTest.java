@@ -629,6 +629,64 @@ protected void setUp() {
                             new ResultPair("not_valid", false), // underscore not allowed
                             new ResultPair("HtTp", true),
                             new ResultPair("telnet", false)};
+   /*------------------Random Tester for IsValdid()------------------
+    * Part 3: Valid and invalid parts of a URL are separated into true and false arrays
+    * A randomizer randomly selects true or false parts of the of a url and 
+    * generates a url
+    */
+   String[] trueSchemes = new String[] {"http://", "ftp://"};
+   String[] falseSchemes = new String[] {"3ht://", "http:/", "http:", "http/", "://"};
+   String[] trueAuthorities = new String[] {"www.google.com", "www.google.com.", "go.com", "go.au", "0.0.0.0", "255.255.255.255", "255.com", "go.cc"};
+   String[] falseAuthorities = new String[] {"256.256.256.256", "1.2.3.4.5", "1.2.3.4.", "1.2.3", ".1.2.3.4", "go.a", "go.a1a", "go.cc", "go.1aa", "aaa.", ".aaa", "aaa", ""};
+   String[] truePorts = new String[] {":80", ":65535", ":0", ""};
+   String[] falsePorts = new String[] {":-1", ":65536", ":65636", ":999999999999999999", ":65a"};
+   String[] truePaths = new String[] {"/test1", "/t123", "/$23", "/test1/", "", "/test1/file", "/t123/file", "/$23/file"};
+   String[] falsePaths = new String[] {"/..", "/../", "/..//file", "/test1//file", "/#", "/#/file", "/../file"};
+   String[] queries = new String[] {"?action=view", "?action=edit&mode=up", ""};
+
+   public static String selectMember(Random randomNumber, String[] urlParts) {
+        int n = randomNumber.nextInt(urlParts.length);
+        return urlParts[n];
+     }
+   
+   public String selectMemberProbability(String[] trueParts, String[] falseParts) {
+     Random probability = new Random();
+     int prob = probability.nextInt(101);
+     Random random = new Random();
+     String urlPart;
+     //Since only one invalid url part can make a url invalid, in order to increase
+     //the possiblty of generating a valid url for testing, 
+     if(prob < 90) {
+       urlPart = selectMember(random, trueParts);
+     }
+     else {
+       urlPart = selectMember(random, falseParts);
+     }
+     return urlPart;
+   }
+   
+   public void testValidRandomIsValid() throws Throwable {
+
+        //System.out.println("Start test");
+
+        int NUM_TESTS=400;
+       for (int i = 0; i < NUM_TESTS; i++) {
+         
+         Random random = new Random();
+           UrlValidator urlVal = new UrlValidator();
+           
+          String Scheme = selectMemberProbability(trueSchemes, falseSchemes);
+          String Authority = selectMemberProbability(trueAuthorities, falseAuthorities);
+          String Ports = selectMemberProbability(truePorts, falsePorts);
+          String Paths = selectMemberProbability(truePaths, falsePaths);
+          String Query = selectMember(random, queries); 
+          String URL = Scheme + Authority + Ports + Paths + Query;
+          System.out.println(URL);
+  
+          assertTrue(URL, urlVal.isValid(URL));
+       }
+        //System.out.println("Done test");
+     }
 
 
 }
