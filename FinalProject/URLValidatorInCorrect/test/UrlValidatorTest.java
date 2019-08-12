@@ -665,27 +665,51 @@ protected void setUp() {
      return urlPart;
    }
    
-   public void testValidRandomIsValid() throws Throwable {
+   public void testValidRandomIsValid(){
 
-        //System.out.println("Start test");
+        System.out.println("Start test");
 
-        int NUM_TESTS=400;
-       for (int i = 0; i < NUM_TESTS; i++) {
-         
-         Random random = new Random();
-           UrlValidator urlVal = new UrlValidator();
-           
-          String Scheme = selectMemberProbability(trueSchemes, falseSchemes);
-          String Authority = selectMemberProbability(trueAuthorities, falseAuthorities);
-          String Ports = selectMemberProbability(truePorts, falsePorts);
-          String Paths = selectMemberProbability(truePaths, falsePaths);
-          String Query = selectMember(random, queries); 
-          String URL = Scheme + Authority + Ports + Paths + Query;
-          System.out.println(URL);
-  
-          assertTrue(URL, urlVal.isValid(URL));
-       }
-        //System.out.println("Done test");
+        int NUM_TESTS=100;
+	     for (int i = 0; i < NUM_TESTS; i++) {
+	    	 
+	    	 Random random = new Random();
+	         UrlValidator urlVal = new UrlValidator();
+	         int validScheme, validAuthority, validPort, validPath;
+	         
+	        String Scheme = selectMemberProbability(trueSchemes, falseSchemes);
+	        if (Arrays.asList(trueSchemes).contains(Scheme)) {
+	        	validScheme = 1;
+	        } else { validScheme = 0; }
+	        
+	        String Authority = selectMemberProbability(trueAuthorities, falseAuthorities);
+	        if (Arrays.asList(trueAuthorities).contains(Authority)) {
+	        	validAuthority = 1;
+	        }else { validAuthority = 0; }
+	        
+	        String Ports = selectMemberProbability(truePorts, falsePorts);
+	        if (Arrays.asList(truePorts).contains(Ports)) {
+	        	validPort = 1;
+	        }else { validPort = 0; }
+	        
+	        String Paths = selectMemberProbability(truePaths, falsePaths);
+	        if (Arrays.asList(truePaths).contains(Paths)) {
+	        	validPath = 1;
+	        }else { validPath = 0; }
+	        
+	        String Query = selectMember(random, queries); 
+	        String URL = Scheme + Authority + Ports + Paths + Query;
+	        System.out.println(URL);
+	        
+	        if(validScheme == 1 && validAuthority == 1 && validPort == 1 && validPath == 1) {
+	        	//System.out.println("True");
+	        	assertTrue(URL, urlVal.isValid(URL));
+	        } else {
+	        	//System.out.println("False");
+	        	assertFalse(URL, urlVal.isValid(URL));
+	        }
+	        
+	     }
+        System.out.println("Done test");
      }
 
 
